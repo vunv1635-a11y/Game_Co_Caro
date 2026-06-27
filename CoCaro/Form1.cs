@@ -8,7 +8,7 @@ namespace CoCaro
         public Form1()
         {
             InitializeComponent();
-            ChessBoard = new ChessBoardManager(pnlChessBoard);
+            ChessBoard = new ChessBoardManager(pnlChessBoard, playerName, pctbmark);
             ChessBoard.DrawChessBoard();
         }
 

@@ -35,14 +35,14 @@
             panel3 = new Panel();
             label1 = new Label();
             bttLAN = new Button();
-            pctBmark = new PictureBox();
+            pctbmark = new PictureBox();
             txtIP = new TextBox();
             progressBarCooldown = new ProgressBar();
-            playername = new TextBox();
+            playerName = new TextBox();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pctlogo).BeginInit();
             panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pctBmark).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pctbmark).BeginInit();
             SuspendLayout();
             // 
             // pnlChessBoard
@@ -76,15 +76,16 @@
             // panel3
             // 
             panel3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            panel3.BackColor = SystemColors.Control;
             panel3.Controls.Add(label1);
             panel3.Controls.Add(bttLAN);
-            panel3.Controls.Add(pctBmark);
+            panel3.Controls.Add(pctbmark);
             panel3.Controls.Add(txtIP);
             panel3.Controls.Add(progressBarCooldown);
-            panel3.Controls.Add(playername);
+            panel3.Controls.Add(playerName);
             panel3.Location = new Point(570, 309);
             panel3.Name = "panel3";
-            panel3.Size = new Size(280, 290);
+            panel3.Size = new Size(280, 227);
             panel3.TabIndex = 2;
             // 
             // label1
@@ -107,13 +108,14 @@
             bttLAN.Text = "Connect";
             bttLAN.UseVisualStyleBackColor = true;
             // 
-            // pctBmark
+            // pctbmark
             // 
-            pctBmark.Location = new Point(156, 14);
-            pctBmark.Name = "pctBmark";
-            pctBmark.Size = new Size(121, 110);
-            pctBmark.TabIndex = 3;
-            pctBmark.TabStop = false;
+            pctbmark.Location = new Point(156, 14);
+            pctbmark.Name = "pctbmark";
+            pctbmark.Size = new Size(121, 110);
+            pctbmark.SizeMode = PictureBoxSizeMode.StretchImage;
+            pctbmark.TabIndex = 3;
+            pctbmark.TabStop = false;
             // 
             // txtIP
             // 
@@ -130,14 +132,14 @@
             progressBarCooldown.Size = new Size(147, 23);
             progressBarCooldown.TabIndex = 1;
             // 
-            // playername
+            // playerName
             // 
-            playername.Location = new Point(3, 14);
-            playername.Name = "playername";
-            playername.ReadOnly = true;
-            playername.Size = new Size(147, 23);
-            playername.TabIndex = 0;
-            playername.TextChanged += textBox1_TextChanged;
+            playerName.Location = new Point(3, 14);
+            playerName.Name = "playerName";
+            playerName.ReadOnly = true;
+            playerName.Size = new Size(147, 23);
+            playerName.TabIndex = 0;
+            playerName.TextChanged += textBox1_TextChanged;
             // 
             // Form1
             // 
@@ -155,7 +157,7 @@
             ((System.ComponentModel.ISupportInitialize)pctlogo).EndInit();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pctBmark).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pctbmark).EndInit();
             ResumeLayout(false);
         }
 
@@ -166,10 +168,10 @@
         private Panel panel3;
         private PictureBox pctlogo;
         private Button bttLAN;
-        private PictureBox pctBmark;
+        private PictureBox pctbmark;
         private TextBox txtIP;
         private ProgressBar progressBarCooldown;
-        private TextBox playername;
+        private TextBox playerName;
         private Label label1;
     }
 }

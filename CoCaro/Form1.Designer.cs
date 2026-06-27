@@ -28,12 +28,148 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            pnlChessBoard = new Panel();
+            panel2 = new Panel();
+            pctlogo = new PictureBox();
+            panel3 = new Panel();
+            label1 = new Label();
+            bttLAN = new Button();
+            pctBmark = new PictureBox();
+            txtIP = new TextBox();
+            progressBarCooldown = new ProgressBar();
+            playername = new TextBox();
+            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pctlogo).BeginInit();
+            panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pctBmark).BeginInit();
+            SuspendLayout();
+            // 
+            // pnlChessBoard
+            // 
+            pnlChessBoard.Location = new Point(12, 12);
+            pnlChessBoard.Name = "pnlChessBoard";
+            pnlChessBoard.Size = new Size(548, 587);
+            pnlChessBoard.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            panel2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            panel2.Controls.Add(pctlogo);
+            panel2.Location = new Point(569, 12);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(280, 280);
+            panel2.TabIndex = 1;
+            panel2.Paint += panel2_Paint;
+            // 
+            // pctlogo
+            // 
+            pctlogo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            pctlogo.Image = Properties.Resources.logo;
+            pctlogo.Location = new Point(3, 0);
+            pctlogo.Name = "pctlogo";
+            pctlogo.Size = new Size(274, 280);
+            pctlogo.SizeMode = PictureBoxSizeMode.StretchImage;
+            pctlogo.TabIndex = 0;
+            pctlogo.TabStop = false;
+            // 
+            // panel3
+            // 
+            panel3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            panel3.Controls.Add(label1);
+            panel3.Controls.Add(bttLAN);
+            panel3.Controls.Add(pctBmark);
+            panel3.Controls.Add(txtIP);
+            panel3.Controls.Add(progressBarCooldown);
+            panel3.Controls.Add(playername);
+            panel3.Location = new Point(570, 309);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(280, 290);
+            panel3.TabIndex = 2;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Elephant", 20.2499962F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(14, 145);
+            label1.Name = "label1";
+            label1.Size = new Size(254, 35);
+            label1.TabIndex = 5;
+            label1.Text = "5 in a line to win";
+            label1.Click += label1_Click;
+            // 
+            // bttLAN
+            // 
+            bttLAN.Location = new Point(3, 101);
+            bttLAN.Name = "bttLAN";
+            bttLAN.Size = new Size(147, 23);
+            bttLAN.TabIndex = 4;
+            bttLAN.Text = "Connect";
+            bttLAN.UseVisualStyleBackColor = true;
+            // 
+            // pctBmark
+            // 
+            pctBmark.Location = new Point(156, 14);
+            pctBmark.Name = "pctBmark";
+            pctBmark.Size = new Size(121, 110);
+            pctBmark.TabIndex = 3;
+            pctBmark.TabStop = false;
+            // 
+            // txtIP
+            // 
+            txtIP.Location = new Point(3, 72);
+            txtIP.Name = "txtIP";
+            txtIP.Size = new Size(147, 23);
+            txtIP.TabIndex = 2;
+            txtIP.Text = "127.0.0.1";
+            // 
+            // progressBarCooldown
+            // 
+            progressBarCooldown.Location = new Point(3, 43);
+            progressBarCooldown.Name = "progressBarCooldown";
+            progressBarCooldown.Size = new Size(147, 23);
+            progressBarCooldown.TabIndex = 1;
+            // 
+            // playername
+            // 
+            playername.Location = new Point(3, 14);
+            playername.Name = "playername";
+            playername.ReadOnly = true;
+            playername.Size = new Size(147, 23);
+            playername.TabIndex = 0;
+            playername.TextChanged += textBox1_TextChanged;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(864, 607);
+            Controls.Add(panel3);
+            Controls.Add(panel2);
+            Controls.Add(pnlChessBoard);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "Form1";
+            Text = "Game Caro";
+            Load += Form1_Load;
+            panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pctlogo).EndInit();
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pctBmark).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Panel pnlChessBoard;
+        private Panel panel2;
+        private Panel panel3;
+        private PictureBox pctlogo;
+        private Button bttLAN;
+        private PictureBox pctBmark;
+        private TextBox txtIP;
+        private ProgressBar progressBarCooldown;
+        private TextBox playername;
+        private Label label1;
     }
 }

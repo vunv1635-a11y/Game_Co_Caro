@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             pnlChessBoard = new Panel();
             panel2 = new Panel();
@@ -39,15 +40,22 @@
             txtIP = new TextBox();
             progressBarCooldown = new ProgressBar();
             playerName = new TextBox();
+            tmCoolDown = new System.Windows.Forms.Timer(components);
+            menuStrip1 = new MenuStrip();
+            menuToolStripMenuItem = new ToolStripMenuItem();
+            newGameToolStripMenuItem = new ToolStripMenuItem();
+            undoToolStripMenuItem = new ToolStripMenuItem();
+            quitToolStripMenuItem = new ToolStripMenuItem();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pctlogo).BeginInit();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pctbmark).BeginInit();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // pnlChessBoard
             // 
-            pnlChessBoard.Location = new Point(12, 12);
+            pnlChessBoard.Location = new Point(12, 29);
             pnlChessBoard.Name = "pnlChessBoard";
             pnlChessBoard.Size = new Size(548, 587);
             pnlChessBoard.TabIndex = 0;
@@ -56,19 +64,17 @@
             // 
             panel2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             panel2.Controls.Add(pctlogo);
-            panel2.Location = new Point(569, 12);
+            panel2.Location = new Point(569, 29);
             panel2.Name = "panel2";
             panel2.Size = new Size(280, 280);
             panel2.TabIndex = 1;
-            panel2.Paint += panel2_Paint;
             // 
             // pctlogo
             // 
-            pctlogo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             pctlogo.Image = Properties.Resources.logo;
             pctlogo.Location = new Point(3, 0);
             pctlogo.Name = "pctlogo";
-            pctlogo.Size = new Size(274, 280);
+            pctlogo.Size = new Size(274, 274);
             pctlogo.SizeMode = PictureBoxSizeMode.StretchImage;
             pctlogo.TabIndex = 0;
             pctlogo.TabStop = false;
@@ -83,7 +89,7 @@
             panel3.Controls.Add(txtIP);
             panel3.Controls.Add(progressBarCooldown);
             panel3.Controls.Add(playerName);
-            panel3.Location = new Point(570, 309);
+            panel3.Location = new Point(569, 315);
             panel3.Name = "panel3";
             panel3.Size = new Size(280, 227);
             panel3.TabIndex = 2;
@@ -97,7 +103,6 @@
             label1.Size = new Size(254, 35);
             label1.TabIndex = 5;
             label1.Text = "5 in a line to win";
-            label1.Click += label1_Click;
             // 
             // bttLAN
             // 
@@ -139,26 +144,74 @@
             playerName.ReadOnly = true;
             playerName.Size = new Size(147, 23);
             playerName.TabIndex = 0;
-            playerName.TextChanged += textBox1_TextChanged;
+            // 
+            // tmCoolDown
+            // 
+            tmCoolDown.Tick += tmCoolDown_Tick;
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(864, 24);
+            menuStrip1.TabIndex = 3;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // menuToolStripMenuItem
+            // 
+            menuToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newGameToolStripMenuItem, undoToolStripMenuItem, quitToolStripMenuItem });
+            menuToolStripMenuItem.Name = "menuToolStripMenuItem";
+            menuToolStripMenuItem.Size = new Size(50, 20);
+            menuToolStripMenuItem.Text = "Menu";
+            // 
+            // newGameToolStripMenuItem
+            // 
+            newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
+            newGameToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
+            newGameToolStripMenuItem.Size = new Size(174, 22);
+            newGameToolStripMenuItem.Text = "New game";
+            newGameToolStripMenuItem.Click += newGameToolStripMenuItem_Click;
+            // 
+            // undoToolStripMenuItem
+            // 
+            undoToolStripMenuItem.Name = "undoToolStripMenuItem";
+            undoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Z;
+            undoToolStripMenuItem.Size = new Size(174, 22);
+            undoToolStripMenuItem.Text = "Undo";
+            undoToolStripMenuItem.Click += undoToolStripMenuItem_Click;
+            // 
+            // quitToolStripMenuItem
+            // 
+            quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            quitToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Q;
+            quitToolStripMenuItem.Size = new Size(174, 22);
+            quitToolStripMenuItem.Text = "Quit";
+            quitToolStripMenuItem.Click += quitToolStripMenuItem_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(864, 607);
+            ClientSize = new Size(864, 628);
             Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(pnlChessBoard);
+            Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "Game Caro";
-            Load += Form1_Load;
+            FormClosing += Form1_FormClosing;
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pctlogo).EndInit();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pctbmark).EndInit();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -173,5 +226,11 @@
         private ProgressBar progressBarCooldown;
         private TextBox playerName;
         private Label label1;
+        private System.Windows.Forms.Timer tmCoolDown;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem menuToolStripMenuItem;
+        private ToolStripMenuItem newGameToolStripMenuItem;
+        private ToolStripMenuItem undoToolStripMenuItem;
+        private ToolStripMenuItem quitToolStripMenuItem;
     }
 }

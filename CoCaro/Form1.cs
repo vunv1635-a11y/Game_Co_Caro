@@ -1,9 +1,12 @@
+using System.Net.NetworkInformation;
 namespace CoCaro
 {
     public partial class Form1 : Form
     {
         #region Properties
         ChessBoardManager ChessBoard;
+
+        SocketManager socket;
         #endregion
         public Form1()
         {
@@ -20,6 +23,8 @@ namespace CoCaro
 
             tmCoolDown.Interval = Cons.COOL_DOWN_INTERVAL;
 
+            socket = new SocketManager();
+
             NewGame();
         }
 
@@ -35,7 +40,7 @@ namespace CoCaro
         void NewGame()
         {
             progressBarCooldown.Value = 0;
-            tmCoolDown.Stop();            
+            tmCoolDown.Stop();
             undoToolStripMenuItem.Enabled = true;
             ChessBoard.DrawChessBoard();
         }
@@ -46,7 +51,7 @@ namespace CoCaro
         }
 
         void Quit()
-        { 
+        {
             Application.Exit();
         }
         void ChessBoard_PlayerMarked(object sender, EventArgs e)
@@ -83,13 +88,72 @@ namespace CoCaro
         {
             Quit();
         }
-       
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (MessageBox.Show("Do you want to quit?", "Notification", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 e.Cancel = true;
         }
-        
+
+
+        private void bttLAN_Click(object sender, EventArgs e)
+        {
+            socket.IP = txtIP.Text;
+
+            if (!socket.ConnectServer())
+            {
+                socket.CreateServer();
+
+                Thread listenThread = new Thread(() =>
+                {
+                    while (true)
+                    {
+                        Thread.Sleep(500);
+                        try
+                        {
+                            Listen();
+                            break;
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                });
+                listenThread.IsBackground = true;
+                listenThread.Start();
+            }
+            else
+            {
+                Thread listenThread = new Thread(() =>
+                {
+                    Listen();
+                });
+                listenThread.IsBackground = true;
+                listenThread.Start();
+
+                socket.Send("Thong tin tu Client");
+            }
+        }
+
+        void Listen()
+        {
+            string data = (string)socket.Receive();
+
+            MessageBox.Show(data);
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            txtIP.Text = socket.GetLocalIPv4(NetworkInterfaceType.Wireless80211);
+
+            if (string.IsNullOrEmpty(txtIP.Text))
+            {
+                txtIP.Text = socket.GetLocalIPv4(NetworkInterfaceType.Ethernet);
+            }
+        }
+
+
         #endregion
     }
 }

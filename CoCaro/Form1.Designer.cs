@@ -112,6 +112,7 @@
             bttLAN.TabIndex = 4;
             bttLAN.Text = "Connect";
             bttLAN.UseVisualStyleBackColor = true;
+            bttLAN.Click += bttLAN_Click;
             // 
             // pctbmark
             // 
@@ -203,6 +204,7 @@
             Name = "Form1";
             Text = "Game Caro";
             FormClosing += Form1_FormClosing;
+            Shown += Form1_Shown;
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pctlogo).EndInit();
             panel3.ResumeLayout(false);

@@ -70,6 +70,14 @@ namespace CoCaro
             add { endedGame += value; }
             remove { endedGame -= value; }
         }
+
+        private Stack<PlayInfo> playTimeLine;
+
+        public Stack<PlayInfo> PlayTimeLine
+        {
+            get { return playTimeLine; }
+            set { playTimeLine = value; }
+        }
         #endregion
 
         #region Initialization
@@ -84,6 +92,7 @@ namespace CoCaro
                 new Player("Player 1", global::CoCaro.Properties.Resources.X),
                 new Player("Player 2", global::CoCaro.Properties.Resources.O)
             };   
+
         }
         #endregion
 
@@ -92,6 +101,8 @@ namespace CoCaro
         {
             ChessBoard.Enabled = true;
             ChessBoard.Controls.Clear();
+
+            PlayTimeLine = new Stack<PlayInfo>();
 
             CurrentPlayer = 0;
 
@@ -143,6 +154,10 @@ namespace CoCaro
 
             Mark(btn);
 
+            PlayTimeLine.Push(new PlayInfo(GetChessPoint(btn), CurrentPlayer));
+
+            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;
+
             ChangePlayer();
 
             if (playerMarked != null)
@@ -152,14 +167,37 @@ namespace CoCaro
             {
                 EndGame();
             }
-            
-            
         }
 
         public void EndGame() 
         { 
             if(endedGame != null)
                 endedGame(this, new EventArgs());
+        }
+
+        public bool Undo()
+        {
+            if (PlayTimeLine.Count <= 0)
+                return false;
+
+            PlayInfo oldPoint = PlayTimeLine.Pop();
+            Button btn = Matrix[oldPoint.Point.Y][oldPoint.Point.X];
+
+            btn.BackgroundImage = null;
+
+            if (PlayTimeLine.Count <= 0)
+            {
+                CurrentPlayer = 0;
+            }
+            else
+            {
+                oldPoint = PlayTimeLine.Peek();
+                CurrentPlayer = oldPoint.CurrentPlayer == 1 ? 0 : 1;
+            }
+
+            ChangePlayer();
+
+            return true;
         }
         private bool isEndGame(Button btn)
         {
@@ -285,8 +323,6 @@ namespace CoCaro
         private void Mark(Button btn)
         {
             btn.BackgroundImage = Player[CurrentPlayer].Mark;
-
-            CurrentPlayer = CurrentPlayer == 1 ? 0 : 1;
         }
 
         private void ChangePlayer()

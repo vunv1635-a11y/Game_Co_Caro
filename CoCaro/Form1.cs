@@ -28,6 +28,7 @@ namespace CoCaro
         {
             tmCoolDown.Stop();
             pnlChessBoard.Enabled = false;
+            undoToolStripMenuItem.Enabled = false;
             MessageBox.Show("Game Over");
         }
 
@@ -35,13 +36,13 @@ namespace CoCaro
         {
             progressBarCooldown.Value = 0;
             tmCoolDown.Stop();            
-            
+            undoToolStripMenuItem.Enabled = true;
             ChessBoard.DrawChessBoard();
         }
 
         void Undo()
         {
-
+            ChessBoard.Undo();
         }
 
         void Quit()

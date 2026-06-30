@@ -12,6 +12,8 @@ namespace CoCaro
         {
             InitializeComponent();
 
+            Control.CheckForIllegalCrossThreadCalls = false;
+
             ChessBoard = new ChessBoardManager(pnlChessBoard, playerName, pctbmark);
             ChessBoard.EndedGame += ChessBoard_EndedGame;
             ChessBoard.PlayerMarked += ChessBoard_PlayerMarked;
@@ -34,7 +36,7 @@ namespace CoCaro
             tmCoolDown.Stop();
             pnlChessBoard.Enabled = false;
             undoToolStripMenuItem.Enabled = false;
-            MessageBox.Show("Game Over");
+            //MessageBox.Show("Game Over");
         }
 
         void NewGame()
@@ -54,15 +56,22 @@ namespace CoCaro
         {
             Application.Exit();
         }
-        void ChessBoard_PlayerMarked(object sender, EventArgs e)
+        void ChessBoard_PlayerMarked(object sender, ButtonClickEvent e)
         {
             tmCoolDown.Start();
+            pnlChessBoard.Enabled = false;
             progressBarCooldown.Value = 0;
+
+            socket.Send(new SocketData((int)SocketCommand.SEND_POINT,"", e.ClickedPoint));
+
+            Listen();
         }
 
         void ChessBoard_EndedGame(object sender, EventArgs e)
         {
             EndGame();
+
+            socket.Send(new SocketData((int)SocketCommand.END_GAME, "", new Point());
         }
         private void tmCoolDown_Tick(object sender, EventArgs e)
         {
@@ -71,6 +80,7 @@ namespace CoCaro
             if (progressBarCooldown.Value >= progressBarCooldown.Maximum)
             {
                 EndGame();
+                socket.Send(new SocketData((int)SocketCommand.TIME_OUT, "", new Point());
             }
         }
 
@@ -93,6 +103,10 @@ namespace CoCaro
         {
             if (MessageBox.Show("Do you want to quit?", "Notification", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 e.Cancel = true;
+            else
+            {                 
+                socket.Send(new SocketData((int)SocketCommand.QUIT, "", new Point()));
+            }
         }
 
 
@@ -102,47 +116,36 @@ namespace CoCaro
 
             if (!socket.ConnectServer())
             {
+                socket.isServer = true;
+                pnlChessBoard.Enabled = true;
                 socket.CreateServer();
-
-                Thread listenThread = new Thread(() =>
-                {
-                    while (true)
-                    {
-                        Thread.Sleep(500);
-                        try
-                        {
-                            Listen();
-                            break;
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                });
-                listenThread.IsBackground = true;
-                listenThread.Start();
             }
             else
             {
-                Thread listenThread = new Thread(() =>
-                {
-                    Listen();
-                });
-                listenThread.IsBackground = true;
-                listenThread.Start();
-
-                socket.Send("Thong tin tu Client");
+                socket.isServer = false;
+                pnlChessBoard.Enabled = false;
+                Listen();
             }
         }
 
         void Listen()
         {
-            string data = (string)socket.Receive();
+            Thread listenThread = new Thread(() =>
+            {
+                try
+                {
+                    SocketData data = (SocketData)socket.Receive();
 
-            MessageBox.Show(data);
+                    ProcessData(data);
+                }
+                catch (Exception e)
+                {
+                        
+                }
+            });
+            listenThread.IsBackground = true;
+            listenThread.Start();
         }
-
         private void Form1_Shown(object sender, EventArgs e)
         {
             txtIP.Text = socket.GetLocalIPv4(NetworkInterfaceType.Wireless80211);
@@ -153,6 +156,44 @@ namespace CoCaro
             }
         }
 
+        private void ProcessData(SocketData data)
+        {
+            switch(data.Command)
+            {
+                case (int)SocketCommand.NOTIFY:
+                    MessageBox.Show(data.Message);
+                    break;
+                case (int)SocketCommand.NEW_GAME:
+                    NewGame();
+                    break;
+                case (int)SocketCommand.UNDO:
+                    Undo();
+                    break;
+                case (int)SocketCommand.QUIT:
+                    tmCoolDown.Stop();
+                    MessageBox.Show("Other player has quit the game", "Notification");
+                    break;
+                case (int)SocketCommand.SEND_POINT:
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        progressBarCooldown.Value = 0;
+                        pnlChessBoard.Enabled = true;
+                        tmCoolDown.Start();
+                        ChessBoard.OtherPlayerMark(data.Point);
+                    }));
+                    break;
+                case (int)SocketCommand.END_GAME:
+                    MessageBox.Show("Game is Over!", "Notification");
+                    break
+                case (int)SocketCommand.TIME_OUT:
+                    MessageBox.Show("Other player has run out of time", "Notification");
+                    break;
+                default:
+                    break;
+            }
+
+            Listen();
+        }
 
         #endregion
     }

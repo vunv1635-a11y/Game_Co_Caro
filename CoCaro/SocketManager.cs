@@ -63,6 +63,9 @@ namespace CoCaro
 
         public bool Send(object data) 
         {
+            if (client == null)
+                throw new Exception("Client chưa được khởi tạo.");
+
             byte[] sendData = SerializeData(data);
            
             return SendData(client, sendData);
@@ -78,7 +81,11 @@ namespace CoCaro
 
         private bool SendData(Socket target, byte[] data)
         {
-            return target.Send(data) == 1 ? true : false;
+            //return target.Send(data) == 1 ? true : false;
+            if (target == null)
+                throw new Exception("Socket chưa được khởi tạo.");
+
+            return target.Send(data) == data.Length;
         }
 
         private bool ReceiveData(Socket target, byte[] data)

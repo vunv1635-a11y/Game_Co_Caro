@@ -50,6 +50,7 @@ namespace CoCaro
         void Undo()
         {
             ChessBoard.Undo();
+            progressBarCooldown.Value = 0;
         }
 
         void Quit()
@@ -64,6 +65,8 @@ namespace CoCaro
 
             socket.Send(new SocketData((int)SocketCommand.SEND_POINT,"", e.ClickedPoint));
 
+            undoToolStripMenuItem.Enabled = false;
+
             Listen();
         }
 
@@ -71,7 +74,7 @@ namespace CoCaro
         {
             EndGame();
 
-            socket.Send(new SocketData((int)SocketCommand.END_GAME, "", new Point());
+            socket.Send(new SocketData((int)SocketCommand.END_GAME, "", new Point()));
         }
         private void tmCoolDown_Tick(object sender, EventArgs e)
         {
@@ -80,18 +83,21 @@ namespace CoCaro
             if (progressBarCooldown.Value >= progressBarCooldown.Maximum)
             {
                 EndGame();
-                socket.Send(new SocketData((int)SocketCommand.TIME_OUT, "", new Point());
+                socket.Send(new SocketData((int)SocketCommand.TIME_OUT, "", new Point()));
             }
         }
 
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewGame();
+            socket.Send(new SocketData((int)SocketCommand.NEW_GAME, "", new Point()));
+            pnlChessBoard.Enabled = true;
         }
 
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Undo();
+            socket.Send(new SocketData((int)SocketCommand.UNDO, "", new Point()));
         }
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -164,10 +170,16 @@ namespace CoCaro
                     MessageBox.Show(data.Message);
                     break;
                 case (int)SocketCommand.NEW_GAME:
-                    NewGame();
+                    this.Invoke((MethodInvoker)(() =>
+                    {
+                        NewGame();
+                        pnlChessBoard.Enabled = false;
+                    }));
                     break;
                 case (int)SocketCommand.UNDO:
                     Undo();
+                    progressBarCooldown.Value = 0;
+                    
                     break;
                 case (int)SocketCommand.QUIT:
                     tmCoolDown.Stop();
@@ -180,11 +192,12 @@ namespace CoCaro
                         pnlChessBoard.Enabled = true;
                         tmCoolDown.Start();
                         ChessBoard.OtherPlayerMark(data.Point);
+                        undoToolStripMenuItem.Enabled = true;
                     }));
                     break;
                 case (int)SocketCommand.END_GAME:
                     MessageBox.Show("Game is Over!", "Notification");
-                    break
+                    break;
                 case (int)SocketCommand.TIME_OUT:
                     MessageBox.Show("Other player has run out of time", "Notification");
                     break;

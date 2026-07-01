@@ -166,7 +166,7 @@ namespace CoCaro
         {
             switch(data.Command)
             {
-                case (int)SocketCommand.NOTIFY:
+                case (int)SocketCommand.NOTIFY: 
                     MessageBox.Show(data.Message);
                     break;
                 case (int)SocketCommand.NEW_GAME:
@@ -199,7 +199,7 @@ namespace CoCaro
                     MessageBox.Show("Game is Over!", "Notification");
                     break;
                 case (int)SocketCommand.TIME_OUT:
-                    MessageBox.Show("Other player has run out of time", "Notification");
+                    MessageBox.Show("Run out of time", "Notification");
                     break;
                 default:
                     break;

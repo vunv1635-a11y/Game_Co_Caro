@@ -190,8 +190,8 @@ namespace CoCaro
                 EndGame();
             }
         }
-        public void EndGame() 
-        { 
+        public void EndGame()
+        {
             if(endedGame != null)
                 endedGame(this, new EventArgs());
         }
